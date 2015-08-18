@@ -34,6 +34,6 @@ slide.setSlideEdge(Gravity.BOTTOM|Gravity.LEFT|...);
 
 ## Fade
 
-![Demo](images/githubactivitytransitionslide.gif)
+![Demo](images/githubactivitytransitionfade.gif)
 
 This effect is also the default effect and can be realised by calling AutoTransition.
