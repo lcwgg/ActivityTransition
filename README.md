@@ -77,6 +77,7 @@ On the image and text example, the first activity slides to the left while the t
 
 ![Demo](images/githubactivitytransitionfade.gif)
 
+
 This effect is also the default effect and can be realised by calling `AutoTransition`.
 
 ## Unknown issue
