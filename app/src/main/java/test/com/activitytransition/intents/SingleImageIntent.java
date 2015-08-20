@@ -24,5 +24,4 @@ public class SingleImageIntent extends Intent {
     public int getImageId() {
         return getIntExtra(ARG_IMAGE_ID, -1);
     }
-
 }

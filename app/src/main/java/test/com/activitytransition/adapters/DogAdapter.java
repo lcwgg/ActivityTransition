@@ -1,5 +1,6 @@
 package test.com.activitytransition.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,11 @@ import test.com.activitytransition.R;
 /**
  * Created by laetitia on 4/30/15.
  */
-public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.ViewHolder> {
+public class DogAdapter extends RecyclerView.Adapter<DogAdapter.ViewHolder> {
 
-    private OnItemCLickListener mItemClickListener;
     private List<Integer> mImages;
 
-    public SingleImageAdapter(List<Integer> images) {
+    public DogAdapter(List<Integer> images) {
         mImages = images;
     }
 
@@ -31,7 +31,7 @@ public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.gridview_element_image, viewGroup, false);
+                .inflate(R.layout.gridview_element_dog, viewGroup, false);
 
         return new ViewHolder(v);
     }
@@ -46,7 +46,7 @@ public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.
         return mImages.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @InjectView(R.id.imageview)
         ImageView mImageView;
@@ -54,27 +54,7 @@ public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.
         public ViewHolder(final View view) {
             super(view);
             ButterKnife.inject(this, view);
-            view.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            if (mItemClickListener != null) {
-
-                mItemClickListener.onItemClick(
-                        mImageView,
-                        getItem(getLayoutPosition())
-                );
-            }
-        }
     }
-
-    public interface OnItemCLickListener {
-        void onItemClick(View imageView, int imageRefId);
-    }
-
-    public void setOnItemClickListener(final OnItemCLickListener itemClickListener) {
-        mItemClickListener = itemClickListener;
-    }
-
 }

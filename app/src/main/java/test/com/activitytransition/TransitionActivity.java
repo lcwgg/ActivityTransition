@@ -6,24 +6,36 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import test.com.activitytransition.adapters.ImageAndTextAdapter;
 import test.com.activitytransition.adapters.SingleImageAdapter;
+import test.com.activitytransition.intents.ImageAndTextIntent;
 import test.com.activitytransition.intents.SingleImageIntent;
+import test.com.activitytransition.intents.TransitionIntent;
 
-public class TransitionActivity extends Activity implements SingleImageAdapter.OnItemCLickListener {
+public class TransitionActivity extends Activity
+        implements SingleImageAdapter.OnItemCLickListener,
+        ImageAndTextAdapter.OnItemCLickListener {
 
     @InjectView(R.id.recyclerview)
     RecyclerView mRecyclerView;
+
+    private Choice mChoice;
+
+    public enum Choice {SINGLE, IMAGEANDTEXT, FRAGMENT}
+
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // enable the transition
+        // enable the transition (only if theme different from Theme.Material)
 //        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
 
         // possible transitions
@@ -34,7 +46,7 @@ public class TransitionActivity extends Activity implements SingleImageAdapter.O
 //        getWindow().setExitTransition(new Explode());
 
 //        Slide slide = new Slide();
-//        slide.setSlideEdge(Gravity.RIGHT);
+//        slide.setSlideEdge(Gravity.LEFT);
 //        getWindow().setEnterTransition(slide);
 //        getWindow().setExitTransition(slide);
 
@@ -55,10 +67,24 @@ public class TransitionActivity extends Activity implements SingleImageAdapter.O
         images.add(R.drawable.chiot8);
 
         final RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-        final SingleImageAdapter adapter = new SingleImageAdapter(images);
+
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(this);
+
+
+        TransitionIntent intent = new TransitionIntent(getIntent());
+        mChoice = intent.getChoice();
+        switch (mChoice) {
+            case SINGLE:
+                final SingleImageAdapter singleImageAdapter = new SingleImageAdapter(images);
+                mRecyclerView.setAdapter(singleImageAdapter);
+                singleImageAdapter.setOnItemClickListener(this);
+                break;
+            default:
+                final ImageAndTextAdapter imageAndTextAdapter = new ImageAndTextAdapter(images);
+                mRecyclerView.setAdapter(imageAndTextAdapter);
+                imageAndTextAdapter.setOnItemClickListener(this);
+                break;
+        }
 
     }
 
@@ -68,6 +94,13 @@ public class TransitionActivity extends Activity implements SingleImageAdapter.O
         // Activate the transition, nothing will happen without this line
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
         startActivity(intent, options.toBundle());
+    }
 
+    @Override
+    public void onItemClick(View imageView, View textView, int imageRefId) {
+        // Activate the transition, nothing will happen without this line
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+        ImageAndTextIntent imageAndTextIntent = new ImageAndTextIntent(this, mChoice, imageRefId, ((TextView) textView).getText().toString());
+        startActivity(imageAndTextIntent, options.toBundle());
     }
 }

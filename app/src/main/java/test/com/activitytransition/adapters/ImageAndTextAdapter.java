@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -15,12 +16,12 @@ import test.com.activitytransition.R;
 /**
  * Created by laetitia on 4/30/15.
  */
-public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.ViewHolder> {
+public class ImageAndTextAdapter extends RecyclerView.Adapter<ImageAndTextAdapter.ViewHolder> {
 
     private OnItemCLickListener mItemClickListener;
     private List<Integer> mImages;
 
-    public SingleImageAdapter(List<Integer> images) {
+    public ImageAndTextAdapter(List<Integer> images) {
         mImages = images;
     }
 
@@ -31,7 +32,7 @@ public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.gridview_element_image, viewGroup, false);
+                .inflate(R.layout.gridview_element_image_and_text, viewGroup, false);
 
         return new ViewHolder(v);
     }
@@ -39,6 +40,7 @@ public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         viewHolder.mImageView.setImageResource(getItem(i));
+        viewHolder.mTextView.setText(String.format("Dog # %1$d", i));
     }
 
     @Override
@@ -50,6 +52,8 @@ public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.
 
         @InjectView(R.id.imageview)
         ImageView mImageView;
+        @InjectView(R.id.textview)
+        TextView mTextView;
 
         public ViewHolder(final View view) {
             super(view);
@@ -63,6 +67,7 @@ public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.
 
                 mItemClickListener.onItemClick(
                         mImageView,
+                        mTextView,
                         getItem(getLayoutPosition())
                 );
             }
@@ -70,7 +75,7 @@ public class SingleImageAdapter extends RecyclerView.Adapter<SingleImageAdapter.
     }
 
     public interface OnItemCLickListener {
-        void onItemClick(View imageView, int imageRefId);
+        void onItemClick(View imageView, View textView, int imageRefId);
     }
 
     public void setOnItemClickListener(final OnItemCLickListener itemClickListener) {
